@@ -7,11 +7,43 @@ import OrderForm from '../../components/OrderForm/OrderForm';
 class App extends Component {
   constructor(props) {
     super();
+
+    this.state = {
+      orders: []
+    }
   }
 
   componentDidMount() {
-    getOrders()
-      .catch(err => console.error('Error fetching:', err));
+    this.getOrders()
+  }
+
+  getNewOrder = (state) => {
+    if(!state.name || !state.ingredients.length) {
+      console.log('failstate')
+    } else {
+      this.postOrder(state)
+      this.getOrders()
+    }
+  }
+
+  postOrder = (order) => {
+    fetch('http://localhost:3001/api/v1/orders', {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      }, 
+      body: JSON.stringify({
+        name: order.name,
+        ingredients: order.ingredients
+      })
+    })
+  }
+
+  getOrders() {
+    fetch('http://localhost:3001/api/v1/orders')
+    .then(res => res.json())
+    .then(data => this.setState({orders: data.orders}))
+    .catch(err => console.error('Error fetching:', err));
   }
 
   render() {
@@ -19,7 +51,7 @@ class App extends Component {
       <main className="App">
         <header>
           <h1>Burrito Builder</h1>
-          <OrderForm />
+          <OrderForm getNewOrder={this.getNewOrder}/>
         </header>
 
         <Orders orders={this.state.orders}/>
