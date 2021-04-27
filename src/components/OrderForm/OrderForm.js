@@ -13,11 +13,21 @@ class OrderForm extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
+    this.props.getNewOrder(this.state)
     this.clearInputs();
   }
 
   clearInputs = () => {
     this.setState({name: '', ingredients: []});
+  }
+
+  handleNameChange = event => {
+    this.setState({ name: event.target.value });
+  }
+
+  handleIngredientChange = event => {
+    event.preventDefault()
+    this.setState({ingredients: [event.target.name, ...this.state.ingredients]})
   }
 
   render() {
