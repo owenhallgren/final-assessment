@@ -7,17 +7,12 @@ import OrderForm from '../../components/OrderForm/OrderForm';
 class App extends Component {
   constructor(props) {
     super();
-
     this.state = {
-      orders: []
+      orders: [],
     }
   }
 
   componentDidMount() {
-    this.getOrders()
-  }
-
-  componentDidUpdate() {
     this.getOrders()
   }
 
@@ -26,7 +21,6 @@ class App extends Component {
       console.log('failstate')
     } else {
       this.postOrder(state)
-      this.getOrders()
     }
   }
 
@@ -41,6 +35,8 @@ class App extends Component {
         ingredients: order.ingredients
       })
     })
+    .then(res => res.json())
+    .then(data => this.setState({orders: [data, ...this.state.orders]}))
   }
 
   getOrders() {
