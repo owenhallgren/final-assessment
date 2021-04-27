@@ -17,6 +17,10 @@ class App extends Component {
     this.getOrders()
   }
 
+  componentDidUpdate() {
+    this.getOrders()
+  }
+
   getNewOrder = (state) => {
     if(!state.name || !state.ingredients.length) {
       console.log('failstate')
